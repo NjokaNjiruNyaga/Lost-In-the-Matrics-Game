@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class CharacterRun : MonoBehaviour
 {
     public float playerspeed = 20.0f;
     public float gravity = 9f;
@@ -11,12 +11,16 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
     private Animator anim;
     private CharacterController controller;
+    private PlayerAudio audioHandler;
+
     public Transform mycam;
+    public AudioClip wallThump;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
+        audioHandler = GetComponent<PlayerAudio>();
     }
 
     void Rotate()
@@ -54,13 +58,22 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
         Vector3 gravityMove = new Vector3(0, verticalspeed, 0);
         Vector3 fullMove = (move * playerspeed + gravityMove) * Time.deltaTime;
-Debug.Log("MOVE: " + fullMove);
-controller.Move(fullMove);
 
+        controller.Move(fullMove);
+
+        bool isMoving = move.magnitude > 0.1f;
 
         if (anim != null)
         {
-            anim.SetBool("canrun", move.magnitude > 0.1f);
+            anim.SetBool("canrun", isMoving);
+        }
+
+        if (audioHandler != null)
+        {
+            if (isMoving)
+                audioHandler.StartRunning();
+            else
+                audioHandler.StopRunning();
         }
     }
 
@@ -73,11 +86,24 @@ controller.Move(fullMove);
         Debug.Log("H: " + Input.GetAxis("Horizontal"));
         Debug.Log("V: " + Input.GetAxis("Vertical"));
 
-
         // DEBUG key input
         if (Input.GetKey(KeyCode.Home)) Debug.Log("HOME is pressed");
-    if (Input.GetKey(KeyCode.End)) Debug.Log("END is pressed");
-    if (Input.GetKey(KeyCode.PageUp)) Debug.Log("PAGE UP is pressed");
-    if (Input.GetKey(KeyCode.PageDown)) Debug.Log("PAGE DOWN is pressed");
+        if (Input.GetKey(KeyCode.End)) Debug.Log("END is pressed");
+        if (Input.GetKey(KeyCode.PageUp)) Debug.Log("PAGE UP is pressed");
+        if (Input.GetKey(KeyCode.PageDown)) Debug.Log("PAGE DOWN is pressed");
     }
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.CompareTag("Wall"))
+        {
+            if (AudioManager.Instance != null && wallThump != null)
+            {
+                AudioManager.Instance.PlaySoundEffect(wallThump);
+            }
+        }
+    }
+
+   
+
 }

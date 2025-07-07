@@ -52,4 +52,13 @@ public class AudioManager : MonoBehaviour
             sfxSource.PlayOneShot(buttonClickSound, sfxVolume);
         }
     }
+
+    public void PlaySoundEffect(AudioClip clip)
+   {
+    if (sfxSource != null && clip != null)
+    {
+        sfxSource.PlayOneShot(clip);
+    }
+   }
+
 }

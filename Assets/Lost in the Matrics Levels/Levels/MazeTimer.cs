@@ -9,6 +9,7 @@ public class MazeTimer : MonoBehaviour
     public GameObject winText;
     public GameObject loseText;
     public GameObject RestartButton;
+    public AudioSource gameOverAudio; // Game over voice clip
 
     private bool gameEnded = false;
 
@@ -54,6 +55,12 @@ public class MazeTimer : MonoBehaviour
         else
         {
             loseText.SetActive(true);
+
+            // ✅ Play game over voice-over
+            if (gameOverAudio != null && !gameOverAudio.isPlaying)
+            {
+                gameOverAudio.Play();
+            }
         }
 
         RestartButton.SetActive(true);
