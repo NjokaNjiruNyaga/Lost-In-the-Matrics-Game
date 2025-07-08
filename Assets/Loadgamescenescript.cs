@@ -10,7 +10,7 @@ public class Loadgame_scene_script: MonoBehaviour
     public void PlayGame()
     {
         // Either load by index...
-        SceneManager.LoadScene(2); 
+        SceneManager.LoadScene(1); 
 
         // ...OR load by name:
          SceneManager.LoadScene(gameSceneName);
