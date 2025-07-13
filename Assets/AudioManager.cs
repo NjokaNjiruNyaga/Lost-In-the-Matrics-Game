@@ -54,11 +54,29 @@ public class AudioManager : MonoBehaviour
     }
 
     public void PlaySoundEffect(AudioClip clip)
-   {
-    if (sfxSource != null && clip != null)
     {
-        sfxSource.PlayOneShot(clip);
+        if (sfxSource != null && clip != null)
+        {
+            sfxSource.PlayOneShot(clip, sfxVolume);
+        }
     }
-   }
 
+    // ✅ NEW: Called by the Options Menu
+    public void SetMusicVolume(float volume)
+    {
+        musicVolume = volume;
+        if (musicSource != null)
+        {
+            musicSource.volume = musicVolume;
+        }
+    }
+
+    public void SetSFXVolume(float volume)
+    {
+        sfxVolume = volume;
+        if (sfxSource != null)
+        {
+            sfxSource.volume = sfxVolume;
+        }
+    }
 }
